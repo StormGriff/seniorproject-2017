@@ -5,16 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WindowsFileBrowser"
         mc:Ignorable="d"
-        Title="File Browser" Height="350" Width="525">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="4*"/>
-        </Grid.ColumnDefinitions>
+        Title="File Browser" Height="600" Width="1000"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="{x:Type TreeViewItem}">
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Name="img"  Width="20" Height="20" Stretch="Fill"
+                            Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                            AncestorType={x:Type TreeViewItem}},
+                            Path=Header,
+                            Converter={x:Static local:HeaderToImageConverter.Instance}}"/>
+                            <TextBlock Text="{Binding}" Margin="5,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-    </Grid>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Exit"/>
+            </MenuItem>
+        </Menu>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TreeView Name="tvFileTree" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5"
+                      SelectedItemChanged="tvFileTree_SelectedItemChanged">
+
+            </TreeView>
+
+            <ListView Name="lvFileView" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                
+            </ListView>
+        </Grid>
+    </DockPanel>
 </Window>
