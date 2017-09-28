@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Diagnostics;
 
 namespace WindowsFileBrowser
 {
@@ -35,7 +36,7 @@ namespace WindowsFileBrowser
                 TreeViewItem item = new TreeViewItem();
                 item.Header = s;
                 item.Tag = s;
-
+                
                 //for lazy loading of tree view nodes
                 item.Items.Add(dummy); 
                 item.Expanded += new RoutedEventHandler(folder_Expanded);
@@ -59,9 +60,14 @@ namespace WindowsFileBrowser
                         subitem.Tag = s;
                         subitem.FontWeight = FontWeights.Normal;
 
-                        //for lazy loading
-                        subitem.Items.Add(dummy);
-                        subitem.Expanded += new RoutedEventHandler(folder_Expanded);
+                        DirectoryInfo di = new DirectoryInfo(s);
+
+                        if (di.GetDirectories().Length != 0)
+                        {
+                            //for lazy loading
+                            subitem.Items.Add(dummy);
+                            subitem.Expanded += new RoutedEventHandler(folder_Expanded);
+                        }
 
                         item.Items.Add(subitem);
                     }
@@ -72,18 +78,47 @@ namespace WindowsFileBrowser
 
         private void tvFileTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            lvFileView.Items.Clear();
+            lvFileView.ItemsSource = null;
+
+            this.Cursor = Cursors.Wait;
+
+            List<DirectoryFileInfo> items = new List<DirectoryFileInfo>();
 
             TreeViewItem item = (TreeViewItem)tvFileTree.SelectedItem;
-            ListViewItem newItem;
 
             string[] files = Directory.GetFiles(Convert.ToString(item.Tag));
+            FileInfo file;
+            foreach(string s in files)
+            {
+                file = new FileInfo(s);
+                items.Add(new DirectoryFileInfo(file));
+            }
+
+            string[] directories = Directory.GetDirectories(Convert.ToString(item.Tag));
+            DirectoryInfo directory;
+            foreach(string s in directories)
+            {
+                directory = new DirectoryInfo(s);
+                items.Add(new DirectoryFileInfo(directory));
+            }
+
+            lvFileView.ItemsSource = items;
+            this.Cursor = Cursors.Arrow;
+
+            /*
+            string[] files = Directory.GetFiles(Convert.ToString(item.Tag));
+            
 
             foreach(string s in files)
             {
-                newItem = new ListViewItem();
-                lvFileView.Items.Add(newItem);
+                
             }
+            */
+        }
+
+        private void MenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

@@ -51,7 +51,17 @@
             </TreeView>
 
             <ListView Name="lvFileView" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
-                
+                <ContextMenu>
+                    <MenuItem Header="Open" Click="MenuOpen_Click"/>
+                </ContextMenu>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Filename" Width="300" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Size" Width="100" DisplayMemberBinding="{Binding Size}"/>
+                        <GridViewColumn Header="Type" Width="150" DisplayMemberBinding="{Binding FileType}"/>
+                        <GridViewColumn Header="Last Modified" Width="200" DisplayMemberBinding="{Binding LastModified}"/>
+                    </GridView>
+                </ListView.View>
             </ListView>
         </Grid>
     </DockPanel>
