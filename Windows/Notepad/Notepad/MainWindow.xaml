@@ -6,7 +6,15 @@
         xmlns:local="clr-namespace:Notepad"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="Notepad" Height="350" Width="525">
+        BorderThickness="1"
+        Title="Notepad" Height="500" Width="550"
+        MinHeight="500" MinWidth="550">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Name="btnTheme" Content="Theme" Click="btnTheme_Click"/>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -25,6 +33,6 @@
                 <MenuItem Header="Paste"/>
             </MenuItem>
         </Menu>
-        <RichTextBox Name="rtbTextBox" AcceptsTab="True" VerticalScrollBarVisibility="Visible"/>
+        <RichTextBox Name="rtbTextBox" AcceptsTab="True" VerticalScrollBarVisibility="Visible" Margin="5"/>
     </DockPanel>
 </Controls:MetroWindow>

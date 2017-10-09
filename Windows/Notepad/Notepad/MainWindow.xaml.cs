@@ -25,5 +25,11 @@ namespace Notepad
         {
             InitializeComponent();
         }
+
+        private void btnTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeWindow win = new ThemeWindow();
+            win.ShowDialog();
+        }
     }
 }
