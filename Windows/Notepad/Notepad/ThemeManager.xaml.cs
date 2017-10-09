@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.IO;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
 
@@ -13,6 +14,11 @@ namespace Notepad
         public ThemeWindow()
         {
             InitializeComponent();
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SaveStyleToConfig();
         }
 
         private void ChangeAppStyle(string theme = null, string accent = null)
@@ -37,6 +43,34 @@ namespace Notepad
                     ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(accent), appStyle.Item1);
                 }
             }
+        }
+
+        private void SaveStyleToConfig()
+        {
+            Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle();
+
+            //get directory for the executing directory
+            //the config file is located in the same directory as the executable
+            DirectoryInfo configDir = Directory.GetParent(System.Reflection.Assembly.GetEntryAssembly().Location);
+            
+            FileInfo configFile = new FileInfo(configDir + "\\config.cfg");
+
+            configFile.Delete();
+
+            FileStream fs = configFile.OpenWrite();
+            StreamWriter writer = new StreamWriter(fs);
+            StringWriter str = new StringWriter();
+
+            str.WriteLine("[STYLE]");
+            str.WriteLine("theme:" + appStyle.Item1.Name);
+            str.WriteLine("accent:" + appStyle.Item2.Name);
+
+            writer.Write(str.ToString());
+            writer.Flush();
+
+            str.Close();
+            writer.Close();
+            fs.Close();
         }
 
         private void btnLight_Click(object sender, RoutedEventArgs e)
@@ -163,5 +197,7 @@ namespace Notepad
         {
             ChangeAppStyle(null, "Sienna");
         }
+
+        
     }
 }

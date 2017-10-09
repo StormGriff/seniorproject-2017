@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         BorderThickness="1"
         Title="ThemeManager" Height="400" Width="350"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize" Closing="MetroWindow_Closing">
     <StackPanel Orientation="Vertical">
         <GroupBox Header="Change Theme">
             <StackPanel Orientation="Horizontal">

@@ -6,33 +6,39 @@
         xmlns:local="clr-namespace:Notepad"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        BorderThickness="1"
         Title="Notepad" Height="500" Width="550"
-        MinHeight="500" MinWidth="550">
+        MinHeight="500" MinWidth="550"
+        Loaded="MetroWindow_Loaded">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Name="btnTheme" Content="Theme" Click="btnTheme_Click"/>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
-    
+
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="OpenCommand_CanExecute" Executed="OpenCommand_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Save" CanExecute="SaveCommand_CanExecute" Executed="SaveCommand_Executed"/>
+    </Window.CommandBindings>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="New"/>
-                <MenuItem Header="Open..."/>
-                <MenuItem Header="Save"/>
+                <MenuItem Header="New" Command="ApplicationCommands.New"/>
+                <MenuItem Header="Open..." Command="ApplicationCommands.Open"/>
+                <MenuItem Header="Save" Command="ApplicationCommands.Save"/>
                 <MenuItem Header="Save As..."/>
                 <Separator/>
                 <MenuItem Header="Exit"/>
             </MenuItem>
             <MenuItem Header="Edit">
-                <MenuItem Header="Undo"/>
+                <MenuItem Header="Undo" Command="ApplicationCommands.Undo" CommandTarget="{Binding ElementName=rtbTextBox}"/>
                 <Separator/>
-                <MenuItem Header="Copy"/>
-                <MenuItem Header="Cut"/>
-                <MenuItem Header="Paste"/>
+                <MenuItem Header="Copy" Command="ApplicationCommands.Copy" CommandTarget="{Binding ElementName=rtbTextBox}"/>
+                <MenuItem Header="Cut" Command="ApplicationCommands.Cut" CommandTarget="{Binding ElementName=rtbTextBox}"/>
+                <MenuItem Header="Paste" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=rtbTextBox}"/>
             </MenuItem>
         </Menu>
-        <RichTextBox Name="rtbTextBox" AcceptsTab="True" VerticalScrollBarVisibility="Visible" Margin="5"/>
+        <TextBox Name="rtbTextBox" Margin="5" TextWrapping="Wrap" AcceptsTab="True" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
     </DockPanel>
 </Controls:MetroWindow>
