@@ -27,9 +27,9 @@
                 <MenuItem Header="New" Command="ApplicationCommands.New"/>
                 <MenuItem Header="Open..." Command="ApplicationCommands.Open"/>
                 <MenuItem Header="Save" Command="ApplicationCommands.Save"/>
-                <MenuItem Header="Save As..."/>
+                <MenuItem Header="Save As..." Click="mnuSaveAsClicked"/>
                 <Separator/>
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Click="mnuExitClick"/>
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Undo" Command="ApplicationCommands.Undo" CommandTarget="{Binding ElementName=rtbTextBox}"/>

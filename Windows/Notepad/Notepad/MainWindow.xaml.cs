@@ -98,6 +98,39 @@ namespace Notepad
             fs.Close();
         }
 
+        private void mnuExitClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void mnuSaveAsClicked(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.AddExtension = true;
+            sfd.ValidateNames = true;
+            sfd.Filter = "Text Files (*.txt)|*.txt|Rich Text Files (*.rtf)|*.rtf|All Files (*.*)|*.*";
+
+            if (sfd.ShowDialog() == true)
+            {
+                file = new FileInfo(sfd.FileName);
+
+                FileStream fs = new FileStream(file.FullName, FileMode.OpenOrCreate);
+                StreamWriter sw = new StreamWriter(fs);
+
+                foreach (char c in rtbTextBox.Text)
+                {
+                    sw.Write(c);
+                }
+
+                sw.Flush();
+
+                sw.Close();
+                fs.Close();
+            }
+
+            
+        }
+
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //get directory for the executing directory
@@ -136,5 +169,7 @@ namespace Notepad
                 ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
             }
         }
+
+        
     }
 }
