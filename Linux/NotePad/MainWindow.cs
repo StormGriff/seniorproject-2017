@@ -5,7 +5,6 @@ public partial class MainWindow : Gtk.Window
 {
 	private string file;
 	private bool isTextChanged;
-	private Gtk.Clipboard clipboard;
 
 	public MainWindow() : base(Gtk.WindowType.Toplevel)
 	{
@@ -120,26 +119,22 @@ public partial class MainWindow : Gtk.Window
 
 	protected void txtCutClipboard(object sender, EventArgs e)
 	{
+		var clipboard = txtBox.GetClipboard(Gdk.Selection.Clipboard);
+
 		txtBox.Buffer.CutClipboard(clipboard, true);
 	}
 
 	protected void txtCopyClipboard(object sender, EventArgs e)
 	{
+		var clipboard = txtBox.GetClipboard(Gdk.Selection.Clipboard);
+
 		txtBox.Buffer.CopyClipboard(clipboard);
 	}
 
 	protected void txtPasteClipboard(object sender, EventArgs e)
 	{
-		try
-		{
-			txtBox.Buffer.PasteClipboard(clipboard);
-		}
-		catch (Exception ex)
-		{
-			MessageDialog dia = new MessageDialog(this, DialogFlags.NoSeparator, MessageType.Error, ButtonsType.Close, "", null);
-			dia.Text = ex.Message;
-			dia.Show();
+		var clipboard = txtBox.GetClipboard(Gdk.Selection.Clipboard);
 
-		}
+		txtBox.Buffer.PasteClipboard(clipboard);
 	}
 }
