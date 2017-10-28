@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.IO;
 using MahApps.Metro.Controls;
@@ -10,11 +8,10 @@ using MahApps.Metro;
 using WpfAnimatedGif;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using System.Windows.Input;
 
-//TODO: load gifs
-//TODO: alter behavior due to file type
-//TODO: next and previous buttons
-//TODO: image transforms
+//TODO: click through image transforms
+//TODO: options with valid file cycling option
 
 namespace MediaViewer
 {
@@ -23,6 +20,12 @@ namespace MediaViewer
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        DirectoryInfo currentDirectory;
+        List<FileInfo> currentFileList;
+        ImageTransform gifTransform;
+        ImageTransform staticTransform;
+        int fileIndex;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +34,18 @@ namespace MediaViewer
             AppTheme theme = ThemeManager.GetAppTheme("BaseLight");
 
             ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
+        }
+
+        private void SwitchToGif()
+        {
+            imgGifCenter.Visibility = Visibility.Visible;
+            imgStaticCenter.Visibility = Visibility.Hidden;
+        }
+
+        private void SwitchToImage()
+        {
+            imgGifCenter.Visibility = Visibility.Hidden;
+            imgStaticCenter.Visibility = Visibility.Visible;
         }
 
         private void LoadConfig()
@@ -72,6 +87,42 @@ namespace MediaViewer
             }
         }
 
+        private bool IsValid(string extension)
+        {
+            if(IsGif(extension) || IsImage(extension))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool IsImage(string extension)
+        {
+            if(extension == ".png" || extension == ".jpg" || extension == ".tif")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool IsGif(string extension)
+        {
+            if(extension == ".gif")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void btnTheme_Click(object sender, RoutedEventArgs e)
         {
             ThemeWindow win = new ThemeWindow();
@@ -82,18 +133,214 @@ namespace MediaViewer
         {
             LoadConfig();
 
-            imgCenter.Source = new BitmapImage(new Uri("Z:\\IMAGES\\PONY\\BY ARTIST\\Ambris\\1370296 - Friendship_is_Magic Lightning_Dust My_Little_Pony Spitfire ambris.jpg"));
+            ImageBehavior.SetRepeatBehavior(imgGifCenter, System.Windows.Media.Animation.RepeatBehavior.Forever);
+
+            gifTransform = new ImageTransform();
+            staticTransform = new ImageTransform();
+
+            gifTransform.Initialize(imgGifCenter);
+            staticTransform.Initialize(imgStaticCenter);
         }
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Image Files (*.png; *.bmp; *.jpg; *.gif)|*.png; *.bmp; *.jpg; *.gif)|All Files|*.*";
+            ofd.Filter = "Image Files|*.png;*.bmp;*.jpg;*.gif|All Files|*.*";
 
             if(ofd.ShowDialog() == true)
             {
-                imgCenter.Source = new BitmapImage(new Uri(ofd.FileName));
+                Cursor tempCursor = this.Cursor;
+                this.Cursor = Cursors.Wait;
+                
+
+                currentDirectory = new DirectoryInfo(Path.GetDirectoryName(ofd.FileName));
+                currentFileList = currentDirectory.GetFiles().ToList();
+
+                for(int i = 0; i < currentFileList.Count; i++)
+                {
+                    if(currentFileList.ElementAt(i).FullName == ofd.FileName)
+                    {
+                        fileIndex = i;
+                        break;
+                    }
+                }
+
+                FileInfo file = new FileInfo(ofd.FileName);
+
+                if (IsImage(file.Extension))
+                {
+                    imgStaticCenter.Source = new BitmapImage(new Uri(ofd.FileName));
+
+                    SwitchToImage();
+                }
+                else if (IsGif(file.Extension))
+                {
+                    ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                    SwitchToGif();
+                }
+
+                this.Cursor = tempCursor;
             }
+        }
+
+        private void btnLeft_Click(object sender, RoutedEventArgs e)
+        {
+            FileInfo file = null;
+
+            //keeps edge cases from skipping the for loop
+            if (fileIndex - 1 < 0)
+            {
+                fileIndex += currentFileList.Count;
+            }
+            
+            for(int i = fileIndex - 1; i < currentFileList.Count && i >= 0; i--)
+            {
+                file = currentFileList.ElementAt(i);
+                
+                if(i < 0)
+                {
+                    i += currentFileList.Count;
+                }
+
+                //full loop through every file with no valid files
+                if(i == fileIndex)
+                {
+                    return;
+                }
+
+                if (IsValid(file.Extension))
+                {
+                    fileIndex = i;
+
+                    if (IsImage(file.Extension))
+                    {
+                        imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
+                        SwitchToImage();
+                    }
+                    else if (IsGif(file.Extension))
+                    {
+                        Cursor tempCursor = this.Cursor;
+                        this.Cursor = Cursors.Wait;
+
+                        ImageBehavior.SetAnimatedSource(imgGifCenter, null);
+                        imgGifCenter.Source = null;
+
+                        ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                        SwitchToGif();
+
+                        this.Cursor = tempCursor;
+                    }
+
+                    return;
+                }
+            }
+        }
+
+        private void btnRight_Click(object sender, RoutedEventArgs e)
+        {
+            FileInfo file = null;
+
+            //keeps edge cases from skipping the for loop
+            if (fileIndex + 1 >= currentFileList.Count)
+            {
+                fileIndex -= currentFileList.Count;
+            }
+
+            for (int i = fileIndex + 1; i < currentFileList.Count && i >= 0; i++)
+            {
+                file = currentFileList.ElementAt(i);
+
+                if (i >= currentFileList.Count)
+                {
+                    i -= currentFileList.Count;
+                }
+
+                //full loop through every file with no valid files
+                if (i == fileIndex)
+                {
+                    return;
+                }
+
+                if (IsValid(file.Extension))
+                {
+                    fileIndex = i;
+
+                    if (IsImage(file.Extension))
+                    {
+                        imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
+                        SwitchToImage();
+                    }
+                    else if (IsGif(file.Extension))
+                    {
+                        Cursor tempCursor = this.Cursor;
+                        this.Cursor = Cursors.Wait;
+
+                        ImageBehavior.SetAnimatedSource(imgGifCenter, null);
+                        imgGifCenter.Source = null;
+
+                        ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                        SwitchToGif();
+
+                        this.Cursor = tempCursor;
+                    }
+
+                    return;
+                }
+            }
+
+        }
+
+        private void imgStaticCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            staticTransform.MouseLeftDown(e, this);
+        }
+
+        private void imgStaticCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            staticTransform.MouseLeftUp(e);
+        }
+
+        private void imgStaticCenter_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            staticTransform.MouseWheel(e);
+        }
+
+        private void imgStaticCenter_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            staticTransform.PreviewMouseRightDown();
+        }
+
+        private void imgStaticCenter_MouseMove(object sender, MouseEventArgs e)
+        {
+            staticTransform.MouseMove(e, this);
+        }
+
+        private void imgGifCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            gifTransform.MouseLeftDown(e, this);
+        }
+
+        private void imgGifCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            gifTransform.MouseLeftUp(e);
+        }
+
+        private void imgGifCenter_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            gifTransform.MouseWheel(e);
+        }
+
+        private void imgGifCenter_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            gifTransform.PreviewMouseRightDown();
+        }
+
+        private void imgGifCenter_MouseMove(object sender, MouseEventArgs e)
+        {
+            gifTransform.MouseMove(e, this);
         }
     }
 }

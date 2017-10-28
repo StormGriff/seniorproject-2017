@@ -29,9 +29,9 @@
             <RowDefinition Height="85"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Column="1" Grid.Row="1" Background="Transparent">
-            <DockPanel.Style>
-                <Style TargetType="{x:Type DockPanel}">
+        <Grid Name="grdControlWrap" Grid.Column="1" Grid.Row="1" Panel.ZIndex="1">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter Property="Opacity" Value="0"/>
@@ -41,75 +41,88 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-            </DockPanel.Style>
+            </Grid.Style>
+            <Grid.Background>
+                <SolidColorBrush Opacity="0" Color="Transparent"/>
+            </Grid.Background>
 
-            <Grid Name="grdControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+        <Grid Name="grdControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Background="Transparent" Grid.Column="1" Grid.Row="1" Panel.ZIndex="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                <Button Name="btnLeft" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
-                    <Rectangle Width="30" Height="20">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_arrow_left}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-                <Button Name="btnRight" Grid.Column="6" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
-                    <Rectangle Width="30" Height="20">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_arrow_right}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-                <Button Name="btnFullscreen" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
-                    <Rectangle Width="30" Height="30">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_fullscreen_box}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-                <Button Name="btnBrowse" Grid.Column="2" Grid.Row="0" Height="30" Width="30" Click="btnBrowse_Click">
-                    <Rectangle Width="15" Height="15">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_folder}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-                <Button Name="btnOptions" Grid.Column="2" Grid.Row="1" Height="30" Width="30">
-                    <Rectangle Width="15" Height="15">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_settings}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-                <Button Name="btnZoomIn" Grid.Column="5" Grid.Row="0" Height="30" Width="30">
-                    <Rectangle Width="15" Height="15">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_magnify_add}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-                <Button Name="btnZoomOut" Grid.Column="5" Grid.Row="1" Height="30" Width="30">
-                    <Rectangle Width="15" Height="15">
-                        <Rectangle.Fill>
-                            <VisualBrush Visual="{StaticResource appbar_magnify_minus}"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-                </Button>
-            </Grid>
-        </DockPanel>
+            <Button Name="btnLeft" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnLeft_Click">
+                <Rectangle Width="30" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_arrow_left}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnRight" Grid.Column="6" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnRight_Click">
+                <Rectangle Width="30" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_arrow_right}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnFullscreen" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
+                <Rectangle Width="30" Height="30">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_fullscreen_box}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnBrowse" Grid.Column="2" Grid.Row="0" Height="30" Width="30" Click="btnBrowse_Click">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_folder}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnOptions" Grid.Column="2" Grid.Row="1" Height="30" Width="30">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_settings}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnZoomIn" Grid.Column="5" Grid.Row="0" Height="30" Width="30">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_magnify_add}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnZoomOut" Grid.Column="5" Grid.Row="1" Height="30" Width="30">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_magnify_minus}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+        </Grid>
+        </Grid>
 
-        <Image Name="imgCenter" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <!--<local:ZoomBorder x:Name="zmBorder" ClipToBounds="True" Grid.RowSpan="2" Panel.ZIndex="0">
+            <Image Name="imgStaticCenter"/>
+        </local:ZoomBorder>
+        <local:ZoomBorder ClipToBounds="True" Grid.RowSpan="2" Panel.ZIndex="0">
+            <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="0"/>
+        </local:ZoomBorder>-->
+
+        <Image Name="imgStaticCenter" Grid.RowSpan="2" Panel.ZIndex="0" MouseLeftButtonDown="imgStaticCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgStaticCenter_MouseLeftButtonUp"
+               MouseWheel="imgStaticCenter_MouseWheel" PreviewMouseRightButtonDown="imgStaticCenter_PreviewMouseRightButtonDown" MouseMove="imgStaticCenter_MouseMove"/>
+        <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="0" MouseLeftButtonDown="imgGifCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgGifCenter_MouseLeftButtonUp"
+               MouseWheel="imgGifCenter_MouseWheel" PreviewMouseRightButtonDown="imgGifCenter_PreviewMouseRightButtonDown" MouseMove="imgGifCenter_MouseMove"/>
     </Grid>
 </Controls:MetroWindow>
