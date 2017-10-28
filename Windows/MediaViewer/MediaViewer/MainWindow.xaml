@@ -23,13 +23,14 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid>
+    <Grid ClipToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="85"/>
         </Grid.RowDefinitions>
 
-        <Grid Name="grdControlWrap" Grid.Column="1" Grid.Row="1" Panel.ZIndex="1">
+        <Grid Name="grdControlWrap" Grid.Column="1" Grid.Row="1" Panel.ZIndex="2" MouseLeftButtonDown="grdControlWrap_MouseLeftButtonDown" MouseLeftButtonUp="grdControlWrap_MouseLeftButtonUp"
+              MouseWheel="grdControlWrap_MouseWheel" PreviewMouseRightButtonDown="grdControlWrap_PreviewMouseRightButtonDown" MouseMove="grdControlWrap_MouseMove">
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
@@ -46,7 +47,7 @@
                 <SolidColorBrush Opacity="0" Color="Transparent"/>
             </Grid.Background>
 
-        <Grid Name="grdControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Background="Transparent" Grid.Column="1" Grid.Row="1" Panel.ZIndex="1">
+        <Grid Name="grdControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Background="Transparent" Grid.Column="1" Grid.Row="1" Panel.ZIndex="-1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -60,6 +61,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Opacity" Value="0.75"/>
+                </Style>
+            </Grid.Style>
 
             <Button Name="btnLeft" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnLeft_Click">
                 <Rectangle Width="30" Height="20">
@@ -120,9 +126,9 @@
             <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="0"/>
         </local:ZoomBorder>-->
 
-        <Image Name="imgStaticCenter" Grid.RowSpan="2" Panel.ZIndex="0" MouseLeftButtonDown="imgStaticCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgStaticCenter_MouseLeftButtonUp"
+        <Image Name="imgStaticCenter" Grid.RowSpan="2" Panel.ZIndex="-2" MouseLeftButtonDown="imgStaticCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgStaticCenter_MouseLeftButtonUp"
                MouseWheel="imgStaticCenter_MouseWheel" PreviewMouseRightButtonDown="imgStaticCenter_PreviewMouseRightButtonDown" MouseMove="imgStaticCenter_MouseMove"/>
-        <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="0" MouseLeftButtonDown="imgGifCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgGifCenter_MouseLeftButtonUp"
+        <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="-2" MouseLeftButtonDown="imgGifCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgGifCenter_MouseLeftButtonUp"
                MouseWheel="imgGifCenter_MouseWheel" PreviewMouseRightButtonDown="imgGifCenter_PreviewMouseRightButtonDown" MouseMove="imgGifCenter_MouseMove"/>
     </Grid>
 </Controls:MetroWindow>

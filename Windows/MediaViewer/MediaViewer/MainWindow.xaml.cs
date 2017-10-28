@@ -22,8 +22,7 @@ namespace MediaViewer
     {
         DirectoryInfo currentDirectory;
         List<FileInfo> currentFileList;
-        ImageTransform gifTransform;
-        ImageTransform staticTransform;
+        ImageTransform transform;
         int fileIndex;
 
         public MainWindow()
@@ -42,11 +41,7 @@ namespace MediaViewer
 
             ImageBehavior.SetRepeatBehavior(imgGifCenter, System.Windows.Media.Animation.RepeatBehavior.Forever);
 
-            gifTransform = new ImageTransform();
-            staticTransform = new ImageTransform();
-
-            gifTransform.Initialize(imgGifCenter);
-            staticTransform.Initialize(imgStaticCenter);
+            transform = new ImageTransform();
         }
 
         private void SwitchToGif()
@@ -171,11 +166,15 @@ namespace MediaViewer
                 {
                     imgStaticCenter.Source = new BitmapImage(new Uri(ofd.FileName));
 
+                    transform.Initialize(imgStaticCenter);
+
                     SwitchToImage();
                 }
                 else if (IsGif(file.Extension))
                 {
                     ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                    transform.Initialize(imgGifCenter);
 
                     SwitchToGif();
                 }
@@ -216,6 +215,9 @@ namespace MediaViewer
                     if (IsImage(file.Extension))
                     {
                         imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
+
+                        transform.Initialize(imgStaticCenter);
+
                         SwitchToImage();
                     }
                     else if (IsGif(file.Extension))
@@ -227,6 +229,8 @@ namespace MediaViewer
                         imgGifCenter.Source = null;
 
                         ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                        transform.Initialize(imgGifCenter);
 
                         SwitchToGif();
 
@@ -270,6 +274,9 @@ namespace MediaViewer
                     if (IsImage(file.Extension))
                     {
                         imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
+
+                        transform.Initialize(imgStaticCenter);
+
                         SwitchToImage();
                     }
                     else if (IsGif(file.Extension))
@@ -281,6 +288,8 @@ namespace MediaViewer
                         imgGifCenter.Source = null;
 
                         ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                        transform.Initialize(imgGifCenter);
 
                         SwitchToGif();
 
@@ -295,52 +304,77 @@ namespace MediaViewer
 
         private void imgStaticCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            staticTransform.MouseLeftDown(e, this);
+            transform.MouseLeftDown(e, this);
         }
 
         private void imgStaticCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            staticTransform.MouseLeftUp(e, this);
+            transform.MouseLeftUp(e, this);
         }
 
         private void imgStaticCenter_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            staticTransform.MouseWheel(e);
+            transform.MouseWheel(e);
         }
 
         private void imgStaticCenter_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            staticTransform.PreviewMouseRightDown();
+            transform.PreviewMouseRightDown();
         }
 
         private void imgStaticCenter_MouseMove(object sender, MouseEventArgs e)
         {
-            staticTransform.MouseMove(e, this);
+            transform.MouseMove(e, this);
         }
 
         private void imgGifCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            gifTransform.MouseLeftDown(e, this);
+            transform.MouseLeftDown(e, this);
         }
 
         private void imgGifCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            gifTransform.MouseLeftUp(e, this);
+            transform.MouseLeftUp(e, this);
         }
 
         private void imgGifCenter_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            gifTransform.MouseWheel(e);
+            transform.MouseWheel(e);
         }
 
         private void imgGifCenter_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            gifTransform.PreviewMouseRightDown();
+            transform.PreviewMouseRightDown();
         }
 
         private void imgGifCenter_MouseMove(object sender, MouseEventArgs e)
         {
-            gifTransform.MouseMove(e, this);
+            transform.MouseMove(e, this);
+        }
+
+        private void grdControlWrap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            transform.MouseLeftDown(e, this);
+        }
+
+        private void grdControlWrap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            transform.MouseLeftUp(e, this);
+        }
+
+        private void grdControlWrap_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            transform.MouseWheel(e);
+        }
+
+        private void grdControlWrap_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            transform.PreviewMouseRightDown();
+        }
+
+        private void grdControlWrap_MouseMove(object sender, MouseEventArgs e)
+        {
+            transform.MouseMove(e, this);
         }
     }
 }
