@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.Windows.Input;
 
-//TODO: click through image transforms
 //TODO: options with valid file cycling option
 
 namespace MediaViewer
@@ -24,6 +23,7 @@ namespace MediaViewer
         List<FileInfo> currentFileList;
         ImageTransform transform;
         int fileIndex;
+        bool IsFullscreen;
 
         public MainWindow()
         {
@@ -72,24 +72,24 @@ namespace MediaViewer
                 Accent accent = ThemeManager.GetAccent("Blue");
                 AppTheme theme = ThemeManager.GetAppTheme("BaseLight");
 
-                //string text = sr.ReadToEnd();
-                //string[] lines = text.Split(new char[] { '\n', '\r' });
+                string text = sr.ReadToEnd();
+                string[] lines = text.Split(new char[] { '\n', '\r' });
 
-                //foreach (string l in lines)
-                //{
-                //    if (l.StartsWith("accent:"))
-                //    {
-                //        string[] temp = l.Split(':');
+                foreach (string l in lines)
+                {
+                    if (l.StartsWith("accent:"))
+                    {
+                        string[] temp = l.Split(':');
 
-                //        accent = ThemeManager.GetAccent(temp[1]);
-                //    }
-                //    if (l.StartsWith("theme:"))
-                //    {
-                //        string[] temp = l.Split(':');
+                        accent = ThemeManager.GetAccent(temp[1]);
+                    }
+                    if (l.StartsWith("theme:"))
+                    {
+                        string[] temp = l.Split(':');
 
-                //        theme = ThemeManager.GetAppTheme(temp[1]);
-                //    }
-                //}
+                        theme = ThemeManager.GetAppTheme(temp[1]);
+                    }
+                }
 
                 ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
             }
@@ -129,12 +129,6 @@ namespace MediaViewer
             {
                 return false;
             }
-        }
-
-        private void btnTheme_Click(object sender, RoutedEventArgs e)
-        {
-            ThemeWindow win = new ThemeWindow();
-            win.ShowDialog();
         }
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
@@ -300,6 +294,42 @@ namespace MediaViewer
                 }
             }
 
+        }
+
+        private void btnZoomIn_Click(object sender, RoutedEventArgs e)
+        {
+            transform.ZoomButton(1);
+        }
+
+        private void btnZoomOut_Click(object sender, RoutedEventArgs e)
+        {
+            transform.ZoomButton(-1);
+        }
+
+        private void btnOptions_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow win = new OptionsWindow();
+            win.Show();
+        }
+
+        private void btnFullscreen_Click(object sender, RoutedEventArgs e)
+        {
+            if(!IsFullscreen)
+            {
+                this.ShowTitleBar = false;
+                this.WindowState = WindowState.Maximized;
+                this.WindowStyle = WindowStyle.None;
+
+                IsFullscreen = false;
+            }
+            else
+            {
+                this.ShowTitleBar = true;
+                this.WindowState = WindowState.Normal;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+
+                IsFullscreen = true;
+            }
         }
 
         private void imgStaticCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

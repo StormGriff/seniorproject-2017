@@ -9,12 +9,6 @@
         Title="Media Viewer" Height="475" Width="700"
         MinHeight="475" MinWidth="475"
         Loaded="MetroWindow_Loaded">
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands>
-            <Button Name="btnTheme" Content="Theme" Click="btnTheme_Click"/>
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
-
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -81,7 +75,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Button>
-            <Button Name="btnFullscreen" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
+            <Button Name="btnFullscreen" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnFullscreen_Click">
                 <Rectangle Width="30" Height="30">
                     <Rectangle.Fill>
                         <VisualBrush Visual="{StaticResource appbar_fullscreen_box}"/>
@@ -95,21 +89,21 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Button>
-            <Button Name="btnOptions" Grid.Column="2" Grid.Row="1" Height="30" Width="30">
+            <Button Name="btnOptions" Grid.Column="2" Grid.Row="1" Height="30" Width="30" Click="btnOptions_Click">
                 <Rectangle Width="15" Height="15">
                     <Rectangle.Fill>
                         <VisualBrush Visual="{StaticResource appbar_settings}"/>
                     </Rectangle.Fill>
                 </Rectangle>
             </Button>
-            <Button Name="btnZoomIn" Grid.Column="5" Grid.Row="0" Height="30" Width="30">
+            <Button Name="btnZoomIn" Grid.Column="5" Grid.Row="0" Height="30" Width="30" Click="btnZoomIn_Click">
                 <Rectangle Width="15" Height="15">
                     <Rectangle.Fill>
                         <VisualBrush Visual="{StaticResource appbar_magnify_add}"/>
                     </Rectangle.Fill>
                 </Rectangle>
             </Button>
-            <Button Name="btnZoomOut" Grid.Column="5" Grid.Row="1" Height="30" Width="30">
+            <Button Name="btnZoomOut" Grid.Column="5" Grid.Row="1" Height="30" Width="30" Click="btnZoomOut_Click">
                 <Rectangle Width="15" Height="15">
                     <Rectangle.Fill>
                         <VisualBrush Visual="{StaticResource appbar_magnify_minus}"/>

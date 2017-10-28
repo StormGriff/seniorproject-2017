@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Windows;
-using System.IO;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
+using System.IO;
 
 namespace MediaViewer
 {
     /// <summary>
-    /// Interaction logic for ThemeWindow.xaml
+    /// Interaction logic for OptionsWindow.xaml
     /// </summary>
-    public partial class ThemeWindow : MetroWindow
+    public partial class OptionsWindow : MetroWindow
     {
-        public ThemeWindow()
+        public OptionsWindow()
         {
             InitializeComponent();
         }
@@ -197,7 +197,5 @@ namespace MediaViewer
         {
             ChangeAppStyle(null, "Sienna");
         }
-
-
     }
 }

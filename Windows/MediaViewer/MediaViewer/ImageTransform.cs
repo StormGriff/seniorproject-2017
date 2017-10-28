@@ -84,6 +84,32 @@ namespace MediaViewer
             }
         }
 
+        public void ZoomButton(int delta)
+        {
+            if (subject != null)
+            {
+                var st = GetScaleTransform(subject);
+                var tt = GetTranslateTransform(subject);
+
+                double zoom = delta > 0 ? .2 : -.2;
+                if (!(delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
+                    return;
+
+                //Point relative = e.GetPosition(subject);
+                double abosuluteX;
+                double abosuluteY;
+
+                abosuluteX = st.ScaleX + tt.X;
+                abosuluteY = st.ScaleY + tt.Y;
+
+                st.ScaleX += zoom;
+                st.ScaleY += zoom;
+
+                tt.X = abosuluteX - st.ScaleX;
+                tt.Y = abosuluteY - st.ScaleY;
+            }
+        }
+
         public void MouseLeftDown(MouseButtonEventArgs e, Window item)
         {
             if (subject != null)
