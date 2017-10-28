@@ -36,6 +36,19 @@ namespace MediaViewer
             ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
         }
 
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadConfig();
+
+            ImageBehavior.SetRepeatBehavior(imgGifCenter, System.Windows.Media.Animation.RepeatBehavior.Forever);
+
+            gifTransform = new ImageTransform();
+            staticTransform = new ImageTransform();
+
+            gifTransform.Initialize(imgGifCenter);
+            staticTransform.Initialize(imgStaticCenter);
+        }
+
         private void SwitchToGif()
         {
             imgGifCenter.Visibility = Visibility.Visible;
@@ -127,19 +140,6 @@ namespace MediaViewer
         {
             ThemeWindow win = new ThemeWindow();
             win.ShowDialog();
-        }
-
-        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadConfig();
-
-            ImageBehavior.SetRepeatBehavior(imgGifCenter, System.Windows.Media.Animation.RepeatBehavior.Forever);
-
-            gifTransform = new ImageTransform();
-            staticTransform = new ImageTransform();
-
-            gifTransform.Initialize(imgGifCenter);
-            staticTransform.Initialize(imgStaticCenter);
         }
 
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
@@ -300,7 +300,7 @@ namespace MediaViewer
 
         private void imgStaticCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            staticTransform.MouseLeftUp(e);
+            staticTransform.MouseLeftUp(e, this);
         }
 
         private void imgStaticCenter_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -325,7 +325,7 @@ namespace MediaViewer
 
         private void imgGifCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            gifTransform.MouseLeftUp(e);
+            gifTransform.MouseLeftUp(e, this);
         }
 
         private void imgGifCenter_MouseWheel(object sender, MouseWheelEventArgs e)

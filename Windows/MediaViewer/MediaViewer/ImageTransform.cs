@@ -91,17 +91,17 @@ namespace MediaViewer
                 var tt = GetTranslateTransform(subject);
                 start = e.GetPosition(item);
                 origin = new Point(tt.X, tt.Y);
-                //this.Cursor = Cursors.Hand;
+                item.Cursor = Cursors.Hand;
                 subject.CaptureMouse();
             }
         }
 
-        public void MouseLeftUp(MouseButtonEventArgs e)
+        public void MouseLeftUp(MouseButtonEventArgs e, Window item)
         {
             if (subject != null)
             {
                 subject.ReleaseMouseCapture();
-                //this.Cursor = Cursors.Arrow;
+                item.Cursor = Cursors.Arrow;
             }
         }
 
