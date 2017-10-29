@@ -24,6 +24,8 @@ namespace MediaViewer
         ImageTransform transform;
         int fileIndex;
         bool IsFullscreen;
+        bool IsImageLoaded;
+        bool IsVideoLoaded;
 
         public MainWindow()
         {
@@ -33,6 +35,9 @@ namespace MediaViewer
             AppTheme theme = ThemeManager.GetAppTheme("BaseLight");
 
             ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
+
+            IsImageLoaded = false;
+            IsVideoLoaded = false;
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -42,18 +47,29 @@ namespace MediaViewer
             ImageBehavior.SetRepeatBehavior(imgGifCenter, System.Windows.Media.Animation.RepeatBehavior.Forever);
 
             transform = new ImageTransform();
+
+            vidCenter.EndBehavior = Meta.Vlc.Wpf.EndBehavior.Repeat;
         }
 
         private void SwitchToGif()
         {
             imgGifCenter.Visibility = Visibility.Visible;
             imgStaticCenter.Visibility = Visibility.Hidden;
+            vidCenter.Visibility = Visibility.Hidden;
         }
 
         private void SwitchToImage()
         {
             imgGifCenter.Visibility = Visibility.Hidden;
             imgStaticCenter.Visibility = Visibility.Visible;
+            vidCenter.Visibility = Visibility.Hidden;
+        }
+
+        private void SwitchToVideo()
+        {
+            imgGifCenter.Visibility = Visibility.Hidden;
+            imgStaticCenter.Visibility = Visibility.Hidden;
+            vidCenter.Visibility = Visibility.Visible;
         }
 
         private void LoadConfig()
@@ -97,7 +113,7 @@ namespace MediaViewer
 
         private bool IsValid(string extension)
         {
-            if(IsGif(extension) || IsImage(extension))
+            if(IsGif(extension) || IsImage(extension) || IsVideo(extension))
             {
                 return true;
             }
@@ -131,280 +147,93 @@ namespace MediaViewer
             }
         }
 
-        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        private bool IsVideo(string extension)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Image Files|*.png;*.bmp;*.jpg;*.gif|All Files|*.*";
-
-            if(ofd.ShowDialog() == true)
+            if(extension == ".webm" || extension == ".mp4")
             {
-                Cursor tempCursor = this.Cursor;
-                this.Cursor = Cursors.Wait;
-                
-
-                currentDirectory = new DirectoryInfo(Path.GetDirectoryName(ofd.FileName));
-                currentFileList = currentDirectory.GetFiles().ToList();
-
-                for(int i = 0; i < currentFileList.Count; i++)
-                {
-                    if(currentFileList.ElementAt(i).FullName == ofd.FileName)
-                    {
-                        fileIndex = i;
-                        break;
-                    }
-                }
-
-                FileInfo file = new FileInfo(ofd.FileName);
-
-                if (IsImage(file.Extension))
-                {
-                    imgStaticCenter.Source = new BitmapImage(new Uri(ofd.FileName));
-
-                    transform.Initialize(imgStaticCenter);
-
-                    SwitchToImage();
-                }
-                else if (IsGif(file.Extension))
-                {
-                    ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
-
-                    transform.Initialize(imgGifCenter);
-
-                    SwitchToGif();
-                }
-
-                this.Cursor = tempCursor;
-            }
-        }
-
-        private void btnLeft_Click(object sender, RoutedEventArgs e)
-        {
-            FileInfo file = null;
-
-            //keeps edge cases from skipping the for loop
-            if (fileIndex - 1 < 0)
-            {
-                fileIndex += currentFileList.Count;
-            }
-            
-            for(int i = fileIndex - 1; i < currentFileList.Count && i >= 0; i--)
-            {
-                file = currentFileList.ElementAt(i);
-                
-                if(i < 0)
-                {
-                    i += currentFileList.Count;
-                }
-
-                //full loop through every file with no valid files
-                if(i == fileIndex)
-                {
-                    return;
-                }
-
-                if (IsValid(file.Extension))
-                {
-                    fileIndex = i;
-
-                    if (IsImage(file.Extension))
-                    {
-                        imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
-
-                        transform.Initialize(imgStaticCenter);
-
-                        SwitchToImage();
-                    }
-                    else if (IsGif(file.Extension))
-                    {
-                        Cursor tempCursor = this.Cursor;
-                        this.Cursor = Cursors.Wait;
-
-                        ImageBehavior.SetAnimatedSource(imgGifCenter, null);
-                        imgGifCenter.Source = null;
-
-                        ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
-
-                        transform.Initialize(imgGifCenter);
-
-                        SwitchToGif();
-
-                        this.Cursor = tempCursor;
-                    }
-
-                    return;
-                }
-            }
-        }
-
-        private void btnRight_Click(object sender, RoutedEventArgs e)
-        {
-            FileInfo file = null;
-
-            //keeps edge cases from skipping the for loop
-            if (fileIndex + 1 >= currentFileList.Count)
-            {
-                fileIndex -= currentFileList.Count;
-            }
-
-            for (int i = fileIndex + 1; i < currentFileList.Count && i >= 0; i++)
-            {
-                file = currentFileList.ElementAt(i);
-
-                if (i >= currentFileList.Count)
-                {
-                    i -= currentFileList.Count;
-                }
-
-                //full loop through every file with no valid files
-                if (i == fileIndex)
-                {
-                    return;
-                }
-
-                if (IsValid(file.Extension))
-                {
-                    fileIndex = i;
-
-                    if (IsImage(file.Extension))
-                    {
-                        imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
-
-                        transform.Initialize(imgStaticCenter);
-
-                        SwitchToImage();
-                    }
-                    else if (IsGif(file.Extension))
-                    {
-                        Cursor tempCursor = this.Cursor;
-                        this.Cursor = Cursors.Wait;
-
-                        ImageBehavior.SetAnimatedSource(imgGifCenter, null);
-                        imgGifCenter.Source = null;
-
-                        ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
-
-                        transform.Initialize(imgGifCenter);
-
-                        SwitchToGif();
-
-                        this.Cursor = tempCursor;
-                    }
-
-                    return;
-                }
-            }
-
-        }
-
-        private void btnZoomIn_Click(object sender, RoutedEventArgs e)
-        {
-            transform.ZoomButton(1);
-        }
-
-        private void btnZoomOut_Click(object sender, RoutedEventArgs e)
-        {
-            transform.ZoomButton(-1);
-        }
-
-        private void btnOptions_Click(object sender, RoutedEventArgs e)
-        {
-            OptionsWindow win = new OptionsWindow();
-            win.Show();
-        }
-
-        private void btnFullscreen_Click(object sender, RoutedEventArgs e)
-        {
-            if(!IsFullscreen)
-            {
-                this.ShowTitleBar = false;
-                this.WindowState = WindowState.Maximized;
-                this.WindowStyle = WindowStyle.None;
-
-                IsFullscreen = false;
+                return true;
             }
             else
             {
-                this.ShowTitleBar = true;
-                this.WindowState = WindowState.Normal;
-                this.WindowStyle = WindowStyle.SingleBorderWindow;
-
-                IsFullscreen = true;
+                return false;
             }
         }
 
-        private void imgStaticCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void SetMedia(string filepath)
         {
-            transform.MouseLeftDown(e, this);
+            FileInfo file = new FileInfo(filepath);
+
+            if (IsImage(file.Extension))
+            {
+                imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
+
+                transform.Initialize(imgStaticCenter);
+
+                SwitchToImage();
+
+                IsImageLoaded = true;
+                IsVideoLoaded = false;
+            }
+            else if (IsGif(file.Extension))
+            {
+                ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
+
+                transform.Initialize(imgGifCenter);
+
+                SwitchToGif();
+
+                IsImageLoaded = true;
+                IsVideoLoaded = false;
+            }
+            else if (IsVideo(file.Extension))
+            {
+                vidCenter.LoadMedia(file.FullName);
+
+                SwitchToVideo();
+
+                vidCenter.Play();
+
+                IsImageLoaded = false;
+                IsVideoLoaded = true;
+            }
         }
 
-        private void imgStaticCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void SetMedia(ref FileInfo file)
         {
-            transform.MouseLeftUp(e, this);
-        }
+            if (IsImage(file.Extension))
+            {
+                imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
 
-        private void imgStaticCenter_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            transform.MouseWheel(e);
-        }
+                transform.Initialize(imgStaticCenter);
 
-        private void imgStaticCenter_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            transform.PreviewMouseRightDown();
-        }
+                SwitchToImage();
 
-        private void imgStaticCenter_MouseMove(object sender, MouseEventArgs e)
-        {
-            transform.MouseMove(e, this);
-        }
+                IsImageLoaded = true;
+                IsVideoLoaded = false;
+            }
+            else if (IsGif(file.Extension))
+            {
+                ImageBehavior.SetAnimatedSource(imgGifCenter, new BitmapImage(new Uri(file.FullName)));
 
-        private void imgGifCenter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            transform.MouseLeftDown(e, this);
-        }
+                transform.Initialize(imgGifCenter);
 
-        private void imgGifCenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            transform.MouseLeftUp(e, this);
-        }
+                SwitchToGif();
 
-        private void imgGifCenter_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            transform.MouseWheel(e);
-        }
+                IsImageLoaded = true;
+                IsVideoLoaded = false;
+            }
+            else if (IsVideo(file.Extension))
+            {
+                vidCenter.LoadMedia(file.FullName);
 
-        private void imgGifCenter_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            transform.PreviewMouseRightDown();
-        }
+                SwitchToVideo();
 
-        private void imgGifCenter_MouseMove(object sender, MouseEventArgs e)
-        {
-            transform.MouseMove(e, this);
-        }
+                vidCenter.Play();
 
-        private void grdControlWrap_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            transform.MouseLeftDown(e, this);
+                IsImageLoaded = false;
+                IsVideoLoaded = true;
+            }
         }
-
-        private void grdControlWrap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            transform.MouseLeftUp(e, this);
-        }
-
-        private void grdControlWrap_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            transform.MouseWheel(e);
-        }
-
-        private void grdControlWrap_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            transform.PreviewMouseRightDown();
-        }
-
-        private void grdControlWrap_MouseMove(object sender, MouseEventArgs e)
-        {
-            transform.MouseMove(e, this);
-        }
+        
     }
 }

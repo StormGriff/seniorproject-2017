@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaViewer"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:Meta="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
         mc:Ignorable="d"
         Title="Media Viewer" Height="475" Width="700"
         MinHeight="475" MinWidth="475"
@@ -113,16 +114,10 @@
         </Grid>
         </Grid>
 
-        <!--<local:ZoomBorder x:Name="zmBorder" ClipToBounds="True" Grid.RowSpan="2" Panel.ZIndex="0">
-            <Image Name="imgStaticCenter"/>
-        </local:ZoomBorder>
-        <local:ZoomBorder ClipToBounds="True" Grid.RowSpan="2" Panel.ZIndex="0">
-            <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="0"/>
-        </local:ZoomBorder>-->
-
         <Image Name="imgStaticCenter" Grid.RowSpan="2" Panel.ZIndex="-2" MouseLeftButtonDown="imgStaticCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgStaticCenter_MouseLeftButtonUp"
                MouseWheel="imgStaticCenter_MouseWheel" PreviewMouseRightButtonDown="imgStaticCenter_PreviewMouseRightButtonDown" MouseMove="imgStaticCenter_MouseMove"/>
         <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="-2" MouseLeftButtonDown="imgGifCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgGifCenter_MouseLeftButtonUp"
                MouseWheel="imgGifCenter_MouseWheel" PreviewMouseRightButtonDown="imgGifCenter_PreviewMouseRightButtonDown" MouseMove="imgGifCenter_MouseMove"/>
+        <Meta:VlcPlayer Name="vidCenter" Grid.RowSpan="2" Panel.ZIndex="-2"/>
     </Grid>
 </Controls:MetroWindow>
