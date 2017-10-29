@@ -1,12 +1,9 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using WpfAnimatedGif;
+using System.Windows.Media;
 
 namespace MediaViewer
 {
@@ -47,7 +44,7 @@ namespace MediaViewer
             FileInfo file = null;
 
             //prevent use before file loaded
-            if (!IsImageLoaded)
+            if ( (!IsImageLoaded) && (!IsVideoLoaded) )
             {
                 return;
             }
@@ -90,7 +87,7 @@ namespace MediaViewer
             FileInfo file = null;
 
             //prevent use before file loaded
-            if (!IsImageLoaded)
+            if ( (!IsImageLoaded) && (!IsVideoLoaded) )
             {
                 return;
             }
@@ -135,6 +132,21 @@ namespace MediaViewer
             {
                 transform.ZoomButton(1);
             }
+            else if(IsVideoLoaded)
+            {
+                if(IsVideoPlaying)
+                {
+                    vidCenter.Pause();
+                    icoZoomIn.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_play"] };
+                    IsVideoPlaying = false;
+                }
+                else
+                {
+                    vidCenter.Play();
+                    icoZoomIn.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_pause"] };
+                    IsVideoPlaying = true;
+                }
+            }
         }
 
         private void btnZoomOut_Click(object sender, RoutedEventArgs e)
@@ -142,6 +154,10 @@ namespace MediaViewer
             if (IsImageLoaded)
             {
                 transform.ZoomButton(-1);
+            }
+            else if (IsVideoLoaded)
+            {
+                vidCenter.Stop();
             }
         }
 

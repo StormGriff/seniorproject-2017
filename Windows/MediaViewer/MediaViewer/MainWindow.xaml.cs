@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.IO;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
 using WpfAnimatedGif;
 using System.Windows.Media.Imaging;
-using Microsoft.Win32;
-using System.Windows.Input;
+using System.Windows.Media;
 
 //TODO: options with valid file cycling option
 
@@ -26,6 +24,7 @@ namespace MediaViewer
         bool IsFullscreen;
         bool IsImageLoaded;
         bool IsVideoLoaded;
+        bool IsVideoPlaying;
 
         public MainWindow()
         {
@@ -38,6 +37,7 @@ namespace MediaViewer
 
             IsImageLoaded = false;
             IsVideoLoaded = false;
+            IsVideoPlaying = false;
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -163,6 +163,8 @@ namespace MediaViewer
         {
             FileInfo file = new FileInfo(filepath);
 
+            IsVideoPlaying = false;
+
             if (IsImage(file.Extension))
             {
                 imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
@@ -170,6 +172,7 @@ namespace MediaViewer
                 transform.Initialize(imgStaticCenter);
 
                 SwitchToImage();
+                ChangeButtonsForImages();
 
                 IsImageLoaded = true;
                 IsVideoLoaded = false;
@@ -181,6 +184,7 @@ namespace MediaViewer
                 transform.Initialize(imgGifCenter);
 
                 SwitchToGif();
+                ChangeButtonsForImages();
 
                 IsImageLoaded = true;
                 IsVideoLoaded = false;
@@ -195,11 +199,16 @@ namespace MediaViewer
 
                 IsImageLoaded = false;
                 IsVideoLoaded = true;
+                IsVideoPlaying = true;
+                icoZoomIn.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_pause"] };
+                icoZoomOut.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_stop"] };
             }
         }
 
         private void SetMedia(ref FileInfo file)
         {
+            IsVideoPlaying = false;
+
             if (IsImage(file.Extension))
             {
                 imgStaticCenter.Source = new BitmapImage(new Uri(file.FullName));
@@ -207,6 +216,7 @@ namespace MediaViewer
                 transform.Initialize(imgStaticCenter);
 
                 SwitchToImage();
+                ChangeButtonsForImages();
 
                 IsImageLoaded = true;
                 IsVideoLoaded = false;
@@ -218,6 +228,7 @@ namespace MediaViewer
                 transform.Initialize(imgGifCenter);
 
                 SwitchToGif();
+                ChangeButtonsForImages();
 
                 IsImageLoaded = true;
                 IsVideoLoaded = false;
@@ -232,7 +243,16 @@ namespace MediaViewer
 
                 IsImageLoaded = false;
                 IsVideoLoaded = true;
+                IsVideoPlaying = true;
+                icoZoomIn.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_pause"] };
+                icoZoomOut.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_stop"] };
             }
+        }
+
+        private void ChangeButtonsForImages()
+        {
+            icoZoomIn.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_magnify_add"] };
+            icoZoomOut.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_magnify_minus"] };
         }
         
     }

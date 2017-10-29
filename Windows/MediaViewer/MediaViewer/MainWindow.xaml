@@ -98,14 +98,14 @@
                 </Rectangle>
             </Button>
             <Button Name="btnZoomIn" Grid.Column="5" Grid.Row="0" Height="30" Width="30" Click="btnZoomIn_Click">
-                <Rectangle Width="15" Height="15">
+                <Rectangle Name="icoZoomIn" Width="15" Height="15">
                     <Rectangle.Fill>
                         <VisualBrush Visual="{StaticResource appbar_magnify_add}"/>
                     </Rectangle.Fill>
                 </Rectangle>
             </Button>
             <Button Name="btnZoomOut" Grid.Column="5" Grid.Row="1" Height="30" Width="30" Click="btnZoomOut_Click">
-                <Rectangle Width="15" Height="15">
+                <Rectangle Name="icoZoomOut" Width="15" Height="15">
                     <Rectangle.Fill>
                         <VisualBrush Visual="{StaticResource appbar_magnify_minus}"/>
                     </Rectangle.Fill>
