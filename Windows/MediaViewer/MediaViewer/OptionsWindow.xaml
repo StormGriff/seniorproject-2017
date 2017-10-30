@@ -15,15 +15,15 @@
                     <GroupBox Header="Image Files">
                         <StackPanel Orientation="Horizontal">
                             <WrapPanel Orientation="Vertical">
-                                <CheckBox Content="PNG Files" Margin="10,2"/>
-                                <CheckBox Content="TIF Files" Margin="10,2"/>
+                                <CheckBox Name="chkPNG" Content="PNG Files" Margin="10,2"/>
+                                <CheckBox Name="chkTIF" Content="TIF Files" Margin="10,2"/>
                             </WrapPanel>
                             <WrapPanel Orientation="Vertical">
-                                <CheckBox Content="JPG Files" Margin="10,2"/>
-                                <CheckBox Content="BMP Files" Margin="10,2"/>
+                                <CheckBox Name="chkJPG" Content="JPG Files" Margin="10,2"/>
+                                <CheckBox Name="chkBMP" Content="BMP Files" Margin="10,2"/>
                             </WrapPanel>
                             <WrapPanel>
-                                <CheckBox Content="GIF Files" Margin="10,2"/>
+                                <CheckBox Name="chkGIF" Content="GIF Files" Margin="10,2"/>
                             </WrapPanel>
                         </StackPanel>
                     </GroupBox>
@@ -31,29 +31,22 @@
                     <GroupBox Header="Video Files">
                         <StackPanel Orientation="Horizontal">
                             <WrapPanel Orientation="Vertical">
-                                <CheckBox Content="PNG Files" Margin="10,2"/>
+                                <CheckBox Name="chkMP4" Content="MP4 Files" Margin="10,2"/>
+                                <CheckBox Name="chkAAC" Content="AAC Files" Margin="10,2"/>
                             </WrapPanel>
                             <WrapPanel Orientation="Vertical">
-                                <CheckBox Content="JPG Files" Margin="10,2"/>
+                                <CheckBox Name="chkWMV" Content="WMV Files" Margin="10,2"/>
+                                <CheckBox Name="chkFFV1" Content="FFV1 Files" Margin="10,2"/>
                             </WrapPanel>
-                            <WrapPanel>
-                                <CheckBox Content="GIF Files" Margin="10,2"/>
+                            <WrapPanel Orientation="Vertical">
+                                <CheckBox Name="chkH264" Content="H264 Files" Margin="10,2"/>
+                                <CheckBox Name="chkWEBM" Content="WEBM Files" Margin="10,2"/>
                             </WrapPanel>
                         </StackPanel>
                     </GroupBox>
 
-                    <GroupBox Header="Audio Files">
-                        <StackPanel Orientation="Horizontal">
-                            <WrapPanel Orientation="Vertical">
-                                <CheckBox Content="PNG Files" Margin="10,2"/>
-                            </WrapPanel>
-                            <WrapPanel Orientation="Vertical">
-                                <CheckBox Content="JPG Files" Margin="10,2"/>
-                            </WrapPanel>
-                            <WrapPanel>
-                                <CheckBox Content="GIF Files" Margin="10,2"/>
-                            </WrapPanel>
-                        </StackPanel>
+                    <GroupBox Header="Memory Cleanup">
+                        <Button Content="Clean" ToolTip="Cleans memory occupied by the program. Use occasionally." Click="Button_Click"/>
                     </GroupBox>
                 </StackPanel>
             </TabItem>

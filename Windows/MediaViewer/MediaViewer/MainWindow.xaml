@@ -18,7 +18,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid ClipToBounds="True">
+    <Grid Name="grdFull" ClipToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="85"/>

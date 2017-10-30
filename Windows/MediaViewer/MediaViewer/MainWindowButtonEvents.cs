@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace MediaViewer
 {
@@ -59,7 +60,7 @@ namespace MediaViewer
             {
                 file = currentFileList.ElementAt(i);
 
-                if (i < 0)
+                if (i - 1 < 0)
                 {
                     i += currentFileList.Count;
                 }
@@ -102,7 +103,7 @@ namespace MediaViewer
             {
                 file = currentFileList.ElementAt(i);
 
-                if (i >= currentFileList.Count)
+                if (i + 1 >= currentFileList.Count)
                 {
                     i -= currentFileList.Count;
                 }
@@ -132,9 +133,9 @@ namespace MediaViewer
             {
                 transform.ZoomButton(1);
             }
-            else if(IsVideoLoaded)
+            else if (IsVideoLoaded)
             {
-                if(IsVideoPlaying)
+                if (IsVideoPlaying)
                 {
                     vidCenter.Pause();
                     icoZoomIn.Fill = new VisualBrush() { Visual = (Visual)Resources["appbar_control_play"] };
@@ -163,8 +164,13 @@ namespace MediaViewer
 
         private void btnOptions_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow win = new OptionsWindow();
-            win.Show();
+            List<bool> list = CreateFiletypeBoolList();
+
+            OptionsWindow win = new OptionsWindow(list);
+
+            win.ShowDialog();
+
+            ProcessFiletypeBoolList(win.GetOutputList());
         }
 
         private void btnFullscreen_Click(object sender, RoutedEventArgs e)

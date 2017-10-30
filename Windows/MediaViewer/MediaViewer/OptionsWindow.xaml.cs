@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Collections.Generic;
 using MahApps.Metro.Controls;
 using MahApps.Metro;
 using System.IO;
@@ -11,44 +12,34 @@ namespace MediaViewer
     /// </summary>
     public partial class OptionsWindow : MetroWindow
     {
-        public OptionsWindow()
+        bool PNG;
+        bool JPG;
+        bool BMP;
+        bool GIF;
+        bool TIF;
+        bool MP4;
+        bool AAC;
+        bool WMV;
+        bool FFV1;
+        bool H264;
+        bool WEBM;
+
+        public OptionsWindow(List<bool> list)
         {
             InitializeComponent();
+
+            ProcessInputList(list);
+            UpdateCheckboxes();
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SaveStyleToConfig();
+            SaveConfig();
+            UpdateBools();
         }
 
-        private void ChangeAppStyle(string theme = null, string accent = null)
+        private void SaveConfig()
         {
-            Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle(Application.Current);
-
-            if (theme != null)
-            {
-                if (accent != null)
-                {
-                    ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(accent), ThemeManager.GetAppTheme(theme));
-                }
-                else
-                {
-                    ThemeManager.ChangeAppStyle(Application.Current, appStyle.Item2, ThemeManager.GetAppTheme(theme));
-                }
-            }
-            else
-            {
-                if (accent != null)
-                {
-                    ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(accent), appStyle.Item1);
-                }
-            }
-        }
-
-        private void SaveStyleToConfig()
-        {
-            Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle();
-
             //get directory for the executing directory
             //the config file is located in the same directory as the executable
             DirectoryInfo configDir = Directory.GetParent(System.Reflection.Assembly.GetEntryAssembly().Location);
@@ -59,143 +50,130 @@ namespace MediaViewer
 
             FileStream fs = configFile.OpenWrite();
             StreamWriter writer = new StreamWriter(fs);
+
+            writer.Write(SaveStyleToConfig());
+            writer.Write(SaveBoolsToConfig());
+            writer.Flush();
+
+            fs.Close();
+        }
+
+        private string SaveStyleToConfig()
+        {
             StringWriter str = new StringWriter();
+            Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle();
 
             str.WriteLine("[STYLE]");
             str.WriteLine("theme:" + appStyle.Item1.Name);
             str.WriteLine("accent:" + appStyle.Item2.Name);
 
-            writer.Write(str.ToString());
-            writer.Flush();
-
-            str.Close();
-            writer.Close();
-            fs.Close();
+            return str.ToString();
         }
 
-        private void btnLight_Click(object sender, RoutedEventArgs e)
+        private string SaveBoolsToConfig()
         {
-            ChangeAppStyle("BaseLight");
+            UpdateBools();
+
+            StringWriter str = new StringWriter();
+
+            str.WriteLine();
+            str.WriteLine();
+            str.WriteLine("[BOOLS]");
+            str.WriteLine("PNG:" + (PNG ? bool.TrueString : bool.FalseString));
+            str.WriteLine("JPG:" + (JPG ? bool.TrueString : bool.FalseString));
+            str.WriteLine("BMP:" + (BMP ? bool.TrueString : bool.FalseString));
+            str.WriteLine("GIF:" + (GIF ? bool.TrueString : bool.FalseString));
+            str.WriteLine("TIF:" + (TIF ? bool.TrueString : bool.FalseString));
+            str.WriteLine("MP4:" + (MP4 ? bool.TrueString : bool.FalseString));
+            str.WriteLine("AAC:" + (AAC ? bool.TrueString : bool.FalseString));
+            str.WriteLine("WMV:" + (WMV ? bool.TrueString : bool.FalseString));
+            str.WriteLine("FFV1:" + (FFV1 ? bool.TrueString : bool.FalseString));
+            str.WriteLine("H264:" + (H264 ? bool.TrueString : bool.FalseString));
+            str.WriteLine("WEBM:" + (WEBM ? bool.TrueString : bool.FalseString));
+
+            return str.ToString();
         }
 
-        private void btnDark_Click(object sender, RoutedEventArgs e)
+        private void UpdateBools()
         {
-            ChangeAppStyle("BaseDark");
+            PNG = (bool)chkPNG.IsChecked;
+            JPG = (bool)chkJPG.IsChecked;
+            BMP = (bool)chkBMP.IsChecked;
+            GIF = (bool)chkGIF.IsChecked;
+            TIF = (bool)chkTIF.IsChecked;
+            MP4 = (bool)chkMP4.IsChecked;
+            AAC = (bool)chkAAC.IsChecked;
+            WMV = (bool)chkWMV.IsChecked;
+            FFV1 = (bool)chkFFV1.IsChecked;
+            H264 = (bool)chkH264.IsChecked;
+            WEBM = (bool)chkWEBM.IsChecked;
         }
 
-        private void btnRed_Click(object sender, RoutedEventArgs e)
+        private void UpdateCheckboxes()
         {
-            ChangeAppStyle(null, "Red");
+            chkPNG.IsChecked = PNG;
+            chkJPG.IsChecked = JPG;
+            chkBMP.IsChecked = BMP;
+            chkGIF.IsChecked = GIF;
+            chkTIF.IsChecked = TIF;
+            chkMP4.IsChecked = MP4;
+            chkAAC.IsChecked = AAC;
+            chkWMV.IsChecked = WMV;
+            chkFFV1.IsChecked = FFV1;
+            chkH264.IsChecked = H264;
+            chkWEBM.IsChecked = WEBM;
         }
 
-        private void btnGreen_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// processed in order of declaration for the class
+        /// </summary>
+        /// <param name="list"></param>
+        private void ProcessInputList(List<bool> list)
         {
-            ChangeAppStyle(null, "Green");
+            if(list.Count != 11)
+            {
+                return;
+            }
+
+            PNG = list[0];
+            JPG = list[1];
+            BMP = list[2];
+            GIF = list[3];
+            TIF = list[4];
+            MP4 = list[5];
+            AAC = list[6];
+            WMV = list[7];
+            FFV1 = list[8];
+            H264 = list[9];
+            WEBM = list[10];
         }
 
-        private void btnBlue_Click(object sender, RoutedEventArgs e)
+        public List<bool> GetOutputList()
         {
-            ChangeAppStyle(null, "Blue");
+            List<bool> ret = new List<bool>();
+
+            ret.Add(PNG);
+            ret.Add(JPG);
+            ret.Add(BMP);
+            ret.Add(GIF);
+            ret.Add(TIF);
+            ret.Add(MP4);
+            ret.Add(AAC);
+            ret.Add(WMV);
+            ret.Add(FFV1);
+            ret.Add(H264);
+            ret.Add(WEBM);
+
+            return ret;
         }
 
-        private void btnPurple_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ChangeAppStyle(null, "Purple");
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
-        private void btnOrange_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Orange");
-        }
-
-        private void btnLime_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Lime");
-        }
-
-        private void btnEmerald_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Emerald");
-        }
-
-        private void btnTeal_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Teal");
-        }
-
-        private void btnCyan_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Cyan");
-        }
-
-        private void btnCobalt_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Cobalt");
-        }
-
-        private void btnIndigo_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Indigo");
-        }
-
-        private void btnViolet_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Violet");
-        }
-
-        private void btnPink_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Pink");
-        }
-
-        private void btnMagenta_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Magenta");
-        }
-
-        private void btnCrimson_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Crimson");
-        }
-
-        private void btnAmber_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Amber");
-        }
-
-        private void btnYellow_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Yellow");
-        }
-
-        private void btnBrown_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Brown");
-        }
-
-        private void btnOlive_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Olive");
-        }
-
-        private void btnSteel_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Steel");
-        }
-
-        private void btnMauve_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Mauve");
-        }
-
-        private void btnTaupe_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Taupe");
-        }
-
-        private void btnSienna_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeAppStyle(null, "Sienna");
-        }
+        //TODO file type options
     }
 }
