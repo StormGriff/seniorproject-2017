@@ -7,8 +7,6 @@ using MahApps.Metro;
 using WpfAnimatedGif;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using System.Windows.Controls;
-using Meta.Vlc.Wpf;
 
 //TODO: memory leaks
 
