@@ -42,49 +42,49 @@ namespace MusicPlayer
             }
         }
 
-        //public void SkipNext()
-        //{
-        //    string file = playlistWindow.Next();
+        public void SkipNext()
+        {
+            //string file = playlistWindow.Next();
 
-        //    if (file != null)
-        //    {
-        //        LoadVideo(file);
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-        //}
+            //if (file != null)
+            //{
+            //    LoadVideo(file);
+            //}
+            //else
+            //{
+            //    return;
+            //}
+        }
 
-        //public void SkipPrevious()
-        //{
-        //    string file = playlistWindow.Previous();
+        public void SkipPrevious()
+        {
+            //string file = playlistWindow.Previous();
 
-        //    if (file != null)
-        //    {
-        //        LoadVideo(file);
-        //    }
-        //    else
-        //    {
-        //        return;
-        //    }
-        //}
+            //if (file != null)
+            //{
+            //    LoadVideo(file);
+            //}
+            //else
+            //{
+            //    return;
+            //}
+        }
 
         public void SelectNewSingleFile()
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Video Files|*.mp4;*.webm|Audio Files|*.mp3;*.wav|All Files|*.*";
+            ofd.Filter = "Audio Files|*.mp3;*.wav|All Files|*.*";
 
             if (ofd.ShowDialog() == true)
             {
                 if (ofd.FileName != null)
                 {
-                    LoadVideo(ofd.FileName);
+                    LoadAudio(ofd.FileName);
                 }
             }
         }
 
-        private void LoadVideo(string file)
+        private void LoadAudio(string file)
         {
             vlcPlayer.LoadMedia(file);
             vlcPlayer.Volume = (int)sldVolume.Value;

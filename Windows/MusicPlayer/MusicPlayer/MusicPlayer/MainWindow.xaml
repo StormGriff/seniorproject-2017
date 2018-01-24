@@ -7,7 +7,8 @@
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:vlc="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="125" Width="525">
+        Title="MainWindow" Height="125" Width="525"
+        Loaded="MetroWindow_Loaded">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,7 +20,26 @@
     <DockPanel>
         <Menu Name="mnuMain" DockPanel.Dock="Top">
             <MenuItem Header="File">
-                
+                <MenuItem Header="Open File" Click="mnuOpenFile_Click"/>
+                <Separator/>
+                <MenuItem Header="Exit" Click="mnuExit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Playback">
+                <MenuItem Header="Play/Pause" Click="mnuPlayPause_Click"/>
+                <MenuItem Header="Stop" Click="mnuStop_Click"/>
+                <MenuItem Header="Next" Click="mnuNext_Click"/>
+                <MenuItem Header="Previous" Click="mnuPrevious_Click"/>
+            </MenuItem>
+            <MenuItem Header="Audio">
+                <MenuItem Header="Volume Up" Click="mnuVolumeUp_Click"/>
+                <MenuItem Header="Volume Down" Click="mnuVolumeDown_Click"/>
+                <MenuItem Header="Mute" Click="mnuMute_Click"/>
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Preferences" Click="mnuPreferences_Click"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+
             </MenuItem>
         </Menu>
 
@@ -27,28 +47,28 @@
             <vlc:VlcPlayer Name="vlcPlayer"/>
             <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
-                    <Button Name="btnLeft" Margin="2">
+                    <Button Name="btnLeft" Margin="2" Click="btnSkipLeft_Click">
                         <Rectangle Width="20" Height="20">
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_control_rewind}"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
-                    <Button Name="btnPlayPause" Margin="2">
+                    <Button Name="btnPlayPause" Margin="2" Click="btnPlayPause_Click">
                         <Rectangle Name="icoPlayPause" Width="20" Height="20">
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_control_play}"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
-                    <Button Name="btnStop" Margin="2">
+                    <Button Name="btnStop" Margin="2" Click="btnStop_Click">
                         <Rectangle Width="20" Height="20">
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_control_stop}"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
-                    <Button Name="btnRight" Margin="2">
+                    <Button Name="btnRight" Margin="2" Click="btnSkipRight_Click">
                         <Rectangle Width="20" Height="20">
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_control_fastforward}"/>
@@ -58,26 +78,32 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
-                    <Button Name="btnBrowse" Margin="2">
+                    <Button Name="btnBrowse" Margin="2" Click="btnBrowse_Click">
                         <Rectangle Width="20" Height="20">
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_folder}"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
-                    <Button Name="btnPlaylist" Content="List" Margin="2"/>
-                    <Button Name="btnOptions" Margin="2">
+                    <Button Name="btnOptions" Margin="2" Click="btnOptions_Click">
                         <Rectangle Width="20" Height="20">
                             <Rectangle.Fill>
                                 <VisualBrush Visual="{StaticResource appbar_settings}"/>
                             </Rectangle.Fill>
                         </Rectangle>
                     </Button>
+                    <ToggleButton Name="tglShuffle" Margin="2">
+                        <Rectangle Width="20" Height="20">
+                            <Rectangle.Fill>
+                                <VisualBrush Visual="{StaticResource appbar_shuffle}"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </ToggleButton>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="10,0,10,0">
                     <TextBlock Name="txtVolume" Text="Volume: 75" Margin="10" Width="75" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Slider Name="sldVolume" Orientation="Horizontal" Width="75" VerticalAlignment="Center" Margin="0,0,15,0" Value="75"/>
+                    <Slider Name="sldVolume" Orientation="Horizontal" Width="75" VerticalAlignment="Center" Margin="0,0,15,0" Value="75" ValueChanged="sldVolume_ValueChanged"/>
                 </StackPanel>
             </WrapPanel>
         </Grid>
