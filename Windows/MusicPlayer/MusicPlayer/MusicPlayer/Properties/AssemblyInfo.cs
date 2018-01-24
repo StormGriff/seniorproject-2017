@@ -1,19 +1,22 @@
-﻿using Meta.Vlc;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Meta.Vlc;
 
-[assembly: VlcSettings(@"libvlc")]
+//meta vlc settings
+[assembly: VlcSettings(@"LibVlc")]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MediaViewer")]
+[assembly: AssemblyTitle("MusicPlayer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MediaViewer")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("MusicPlayer")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

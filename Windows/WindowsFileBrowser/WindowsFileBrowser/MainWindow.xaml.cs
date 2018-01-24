@@ -86,21 +86,30 @@ namespace WindowsFileBrowser
 
             TreeViewItem item = (TreeViewItem)tvFileTree.SelectedItem;
 
-            string[] files = Directory.GetFiles(Convert.ToString(item.Tag));
-            FileInfo file;
-            foreach(string s in files)
+            
+            try
             {
-                file = new FileInfo(s);
-                items.Add(new DirectoryFileInfo(file));
-            }
+                string[] files = Directory.GetFiles(Convert.ToString(item.Tag));
+                FileInfo file;
+                foreach (string s in files)
+                {
+                    file = new FileInfo(s);
+                    items.Add(new DirectoryFileInfo(file));
+                }
 
-            string[] directories = Directory.GetDirectories(Convert.ToString(item.Tag));
-            DirectoryInfo directory;
-            foreach(string s in directories)
-            {
-                directory = new DirectoryInfo(s);
-                items.Add(new DirectoryFileInfo(directory));
+                string[] directories = Directory.GetDirectories(Convert.ToString(item.Tag));
+                DirectoryInfo directory;
+                foreach (string s in directories)
+                {
+                    directory = new DirectoryInfo(s);
+                    items.Add(new DirectoryFileInfo(directory));
+                }
             }
+            catch(IOException ex)
+            {
+
+            }
+            
 
             lvFileView.ItemsSource = items;
             this.Cursor = Cursors.Arrow;

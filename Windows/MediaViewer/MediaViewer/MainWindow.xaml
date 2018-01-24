@@ -1,19 +1,48 @@
-﻿<Window x:Class="MediaViewer.MainWindow"
+﻿<Controls:MetroWindow x:Class="MediaViewer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaViewer"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:Meta="clr-namespace:Meta.Vlc.Wpf;assembly=Meta.Vlc.Wpf"
         mc:Ignorable="d"
         Title="Media Viewer" Height="475" Width="700"
-        MinHeight="475" MinWidth="475">
-    <Grid>
+        MinHeight="475" MinWidth="475"
+        Loaded="MetroWindow_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Name="grdFull" ClipToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="85"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
+        <Grid Name="grdControlWrap" Grid.Column="1" Grid.Row="1" Panel.ZIndex="2" MouseLeftButtonDown="grdControlWrap_MouseLeftButtonDown" MouseLeftButtonUp="grdControlWrap_MouseLeftButtonUp"
+              MouseWheel="grdControlWrap_MouseWheel" PreviewMouseRightButtonDown="grdControlWrap_PreviewMouseRightButtonDown" MouseMove="grdControlWrap_MouseMove">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="0"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="1"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid.Background>
+                <SolidColorBrush Opacity="0" Color="Transparent"/>
+            </Grid.Background>
+
+        <Grid Name="grdControls" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Background="Transparent" Grid.Column="1" Grid.Row="1" Panel.ZIndex="-1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -27,26 +56,68 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Opacity" Value="0.75"/>
+                </Style>
+            </Grid.Style>
 
-            <Button Name="leftButton" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
-                <TextBlock Text="L"/>
+            <Button Name="btnLeft" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnLeft_Click">
+                <Rectangle Width="30" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_arrow_left}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
-            <Button Name="rightButton" Grid.Column="6" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
-                <TextBlock Text="R"/>
+            <Button Name="btnRight" Grid.Column="6" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnRight_Click">
+                <Rectangle Width="30" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_arrow_right}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
-            <Button Name="fullscreenButton" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60">
-                <TextBlock Text="FS"/>
+            <Button Name="btnFullscreen" Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Height="60" Width="60" Click="btnFullscreen_Click">
+                <Rectangle Width="30" Height="30">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_fullscreen_box}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
-            <Button Name="browseButton" Grid.Column="2" Grid.Row="0" Height="30" Width="30">
-                <TextBlock Text="b"/>
+            <Button Name="btnBrowse" Grid.Column="2" Grid.Row="0" Height="30" Width="30" Click="btnBrowse_Click">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_folder}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
-
-            <Button Name="zoomInButton" Grid.Column="5" Grid.Row="0" Height="30" Width="30">
-                <TextBlock Text="+"/>
+            <Button Name="btnOptions" Grid.Column="2" Grid.Row="1" Height="30" Width="30" Click="btnOptions_Click">
+                <Rectangle Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_settings}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
-            <Button Name="zoomOutButton" Grid.Column="5" Grid.Row="1" Height="30" Width="30">
-                <TextBlock Text="-"/>
+            <Button Name="btnZoomIn" Grid.Column="5" Grid.Row="0" Height="30" Width="30" Click="btnZoomIn_Click">
+                <Rectangle Name="icoZoomIn" Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_magnify_add}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <Button Name="btnZoomOut" Grid.Column="5" Grid.Row="1" Height="30" Width="30" Click="btnZoomOut_Click">
+                <Rectangle Name="icoZoomOut" Width="15" Height="15">
+                    <Rectangle.Fill>
+                        <VisualBrush Visual="{StaticResource appbar_magnify_minus}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Button>
         </Grid>
+        </Grid>
+
+        <Image Name="imgStaticCenter" Grid.RowSpan="2" Panel.ZIndex="-2" MouseLeftButtonDown="imgStaticCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgStaticCenter_MouseLeftButtonUp"
+               MouseWheel="imgStaticCenter_MouseWheel" PreviewMouseRightButtonDown="imgStaticCenter_PreviewMouseRightButtonDown" MouseMove="imgStaticCenter_MouseMove"/>
+        <Image Name="imgGifCenter" Grid.RowSpan="2" Panel.ZIndex="-2" MouseLeftButtonDown="imgGifCenter_MouseLeftButtonDown" MouseLeftButtonUp="imgGifCenter_MouseLeftButtonUp"
+               MouseWheel="imgGifCenter_MouseWheel" PreviewMouseRightButtonDown="imgGifCenter_PreviewMouseRightButtonDown" MouseMove="imgGifCenter_MouseMove"/>
+        <Meta:VlcPlayer Name="vidCenter" Grid.RowSpan="2" Panel.ZIndex="-2"/>
     </Grid>
-</Window>
+</Controls:MetroWindow>
