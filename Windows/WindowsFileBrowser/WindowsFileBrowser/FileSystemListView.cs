@@ -10,6 +10,8 @@ namespace WindowsFileBrowser
 {
     public class FileSystemListView: ListView
     {
+        public string activeDirectory = null;
+
         public FileSystemListView()
         {
             GridView gridView = new GridView();

@@ -1,23 +1,24 @@
-﻿<Window x:Class="WindowsFileBrowser.MainWindow"
+﻿<Controls:MetroWindow x:Class="WindowsFileBrowser.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WindowsFileBrowser"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="File Browser" Height="600" Width="1000"
-        Loaded="Window_Loaded">
+        Loaded="MetroWindow_Loaded">
     <Window.Resources>
         <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="HeaderTemplate">
                 <Setter.Value>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Name="img"  Width="20" Height="20" Stretch="Fill"
+                            <!--<Image Name="img"  Width="20" Height="20" Stretch="Fill"
                             Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
                             AncestorType={x:Type TreeViewItem}},
                             Path=Header,
-                            Converter={x:Static local:HeaderToImageConverter.Instance}}"/>
+                            Converter={x:Static local:HeaderToImageConverter.Instance}}"/>-->
                             <TextBlock Text="{Binding}" Margin="5,0" />
                         </StackPanel>
                     </DataTemplate>
@@ -30,6 +31,8 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
+                <MenuItem Header="_Options" Click="mnuOptions_Click"/>
+                <Separator/>
                 <MenuItem Header="_Exit"/>
             </MenuItem>
         </Menu>
@@ -50,7 +53,7 @@
 
             </TreeView>
 
-            <local:FileSystemListView x:Name="lvFileView" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <local:FileSystemListView x:Name="lvFileView" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="5">
                 
             </local:FileSystemListView>
             <!--<ListView Name="lvFileView" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
@@ -65,4 +68,4 @@
             </ListView>-->
         </Grid>
     </DockPanel>
-</Window>
+</Controls:MetroWindow>
